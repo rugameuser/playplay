@@ -2,11 +2,7 @@
 
 uint64 readlong(unsigned char *x) { return x[0] | (x[1] << 8) | (x[2] << 16) | (x[3] << 24); }
 
-unsigned long int unk_sub(unsigned char *a1)
-{
-    unsigned int v1 = readlong(a1);
-    return v1 | (readlong(a1 + 4) << 32);
-}
+unsigned long int unk_sub(unsigned char *a1) { return __PAIR64__(readlong(a1 + 4), readlong(a1)); }
 
 int deobfuscate_key(unsigned char *obfuscated_key, unsigned char *file_id, unsigned char *dst)
 {
@@ -2396,8 +2392,8 @@ int deobfuscate_key(unsigned char *obfuscated_key, unsigned char *file_id, unsig
         --v926;
     } while (v926);
     v928 = v910;
-    v929 = ((unsigned __int64)v910 << 32) | v911;
-    v930 = v909 | (unsigned __int64)(v925 << 32);
+    v929 = __PAIR64__(v910, v911);
+    v930 = __PAIR64__(v925, v909);
     v931 = unk_sub(file_id);
     v932 = unk_sub(file_id + 8);
 
