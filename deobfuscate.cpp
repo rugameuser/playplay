@@ -1,19 +1,31 @@
-#include "main.h"
+#ifdef _WIN32
+#pragma warning(disable : 4244)
+#endif
 
+#include "main.h"
 #include <tuple>
 
-uint64 readlong(unsigned char *x) { return x[0] | (x[1] << 8) | (x[2] << 16) | (x[3] << 24); }
+#include "absl/numeric/int128.h"
 
-unsigned long int unk_sub(unsigned char *a1) { return __PAIR64__(readlong(a1 + 4), readlong(a1)); }
-
-std::tuple<ll, __int128_t, ll, ll> proc_v2(ll v941, __int128_t v933, ll v943, ll v942, uint8_t mp)
+/* pick 32-bit unsigned integer in little endian order */
+static unsigned int U8TOU32(const unsigned char *p)
 {
-    ll v944 = v941 + (v933 >> 8);
+    return (((unsigned int)(p[0] & 0xff)) |
+            ((unsigned int)(p[1] & 0xff) << 8) |
+            ((unsigned int)(p[2] & 0xff) << 16) |
+            ((unsigned int)(p[3] & 0xff) << 24));
+}
+
+unsigned __int64 unk_sub(unsigned char *a1) { return __PAIR64__(U8TOU32(a1 + 4), U8TOU32(a1)); }
+
+std::tuple<ll, absl::uint128, ll, ll> proc_v2(ll v941, absl::uint128 v933, ll v943, ll v942, uint8_t mp)
+{
+    ll v944 = v941 + static_cast<unsigned long long int>(v933 >> 8);
     ll v945 = v944 ^ mp ^ __ROL8__(v941, 3);
     ll v946 = v945 ^ (v943 + __ROL8__(v942, 56));
     ll v947 = v946 ^ __ROL8__(v943, 3);
 
-    long *_v933 = reinterpret_cast<long *>(&v933);
+    long long *_v933 = reinterpret_cast<long long *>(&v933);
     _v933[1] = v944 ^ mp;
     _v933[0] = v944;
 
@@ -957,7 +969,7 @@ int deobfuscate_key(unsigned char *obfuscated_key, unsigned char *file_id, unsig
     unsigned __int64 v930;
     __int64 v931;
     __int64 v932;
-    __int128 v933;
+    absl::uint128 v933;
     __int64 v934;
     __int64 v935;
     __int64 v936;
@@ -968,115 +980,6 @@ int deobfuscate_key(unsigned char *obfuscated_key, unsigned char *file_id, unsig
     __int64 v941;
     __int64 v942;
     __int64 v943;
-    __int64 v944;
-    __int64 v945;
-    __int64 v946;
-    __int64 v947;
-    __int64 v948;
-    __int64 v949;
-    __int64 v950;
-    __int64 v951;
-    __int64 v952;
-    __int64 v953;
-    __int64 v954;
-    __int64 v955;
-    __int64 v956;
-    __int64 v957;
-    __int64 v958;
-    __int64 v959;
-    __int64 v960;
-    __int64 v961;
-    __int64 v962;
-    __int64 v963;
-    __int64 v964;
-    __int64 v965;
-    __int64 v966;
-    __int64 v967;
-    __int64 v968;
-    __int64 v969;
-    __int64 v970;
-    __int64 v971;
-    __int64 v972;
-    __int64 v973;
-    __int64 v974;
-    __int64 v975;
-    __int64 v976;
-    __int64 v977;
-    __int64 v978;
-    __int64 v979;
-    __int64 v980;
-    __int64 v981;
-    __int64 v982;
-    __int64 v983;
-    __int64 v984;
-    __int64 v985;
-    __int64 v986;
-    __int64 v987;
-    __int64 v988;
-    __int64 v989;
-    __int64 v990;
-    __int64 v991;
-    __int64 v992;
-    __int64 v993;
-    __int64 v994;
-    __int64 v995;
-    __int64 v996;
-    __int64 v997;
-    __int64 v998;
-    __int64 v999;
-    __int64 v1000;
-    __int64 v1001;
-    __int64 v1002;
-    __int64 v1003;
-    __int64 v1004;
-    __int64 v1005;
-    __int64 v1006;
-    __int64 v1007;
-    __int64 v1008;
-    __int64 v1009;
-    __int64 v1010;
-    __int64 v1011;
-    __int64 v1012;
-    __int64 v1013;
-    __int64 v1014;
-    __int64 v1015;
-    __int64 v1016;
-    __int64 v1017;
-    __int64 v1018;
-    __int64 v1019;
-    __int64 v1020;
-    __int64 v1021;
-    __int64 v1022;
-    __int64 v1023;
-    __int64 v1024;
-    __int64 v1025;
-    __int64 v1026;
-    __int64 v1027;
-    __int64 v1028;
-    __int64 v1029;
-    __int64 v1030;
-    __int64 v1031;
-    __int64 v1032;
-    __int64 v1033;
-    __int64 v1034;
-    __int64 v1035;
-    __int64 v1036;
-    __int64 v1037;
-    __int64 v1038;
-    __int64 v1039;
-    __int64 v1040;
-    __int64 v1041;
-    __int64 v1042;
-    __int64 v1043;
-    __int64 v1044;
-    __int64 v1045;
-    __int64 v1046;
-    __int64 v1047;
-    __int64 v1048;
-    __int64 v1049;
-    __int64 v1050;
-    __int64 v1051;
-    __int64 v1052;
     __int64 v1053;
     __int64 v1054;
     __int64 v1055;
@@ -1173,10 +1076,10 @@ int deobfuscate_key(unsigned char *obfuscated_key, unsigned char *file_id, unsig
     int v1149;
     int v1150;
 
-    v3 = readlong(obfuscated_key);
-    v4 = readlong(obfuscated_key + 4);
-    v5 = readlong(obfuscated_key + 8);
-    v6 = v3 + readlong(obfuscated_key + 12);
+    v3 = U8TOU32(obfuscated_key);
+    v4 = U8TOU32(obfuscated_key + 4);
+    v5 = U8TOU32(obfuscated_key + 8);
+    v6 = v3 + U8TOU32(obfuscated_key + 12);
     v7 = v5 - __ROL4__(v3, 17) - __ROL4__(v6, 12);
     v8 = dword_2D9E000[(unsigned __int8)v7 + 458] + v4;
     v9 = v8 + v3;
@@ -2418,11 +2321,11 @@ int deobfuscate_key(unsigned char *obfuscated_key, unsigned char *file_id, unsig
     v931 = unk_sub(file_id);
     v932 = unk_sub(file_id + 8);
 
-    long *_v933 = reinterpret_cast<long *>(&v933);
+    long long *_v933 = reinterpret_cast<long long *>(&v933);
     _v933[0] = v930;
     _v933[1] = v909;
 
-    v934 = v931 ^ (v929 + (v933 >> 8));
+    v934 = v931 ^ (v929 + static_cast<unsigned long long int>(v933 >> 8));
     v935 = v934 ^ ((v928 >> 29) + 8 * v929);
     v936 = v931 + __ROL8__(v932, 56);
     v937 = v936 ^ __ROL8__(v931, 3);
@@ -2439,14 +2342,11 @@ int deobfuscate_key(unsigned char *obfuscated_key, unsigned char *file_id, unsig
 
     std::tie(v1053, v933, v1055, v1054) = proc_v2(v941, v933, v943, v942, 2);
 
-    v1056 = (v1053 + (v933 >> 8)) ^ __ROL8__(v1053, 3) ^ (v1055 + __ROL8__(v1054, 56));
+    v1056 = (v1053 + static_cast<unsigned long long int>(v933 >> 8)) ^ __ROL8__(v1053, 3) ^ (v1055 + __ROL8__(v1054, 56));
     v1057 = v1056 ^ 0x1E ^ __ROL8__(v1055, 3);
 
-    unsigned long long p1 = v1056 ^ 0x1E;
-    unsigned long long p2 = v1057;
-
     std::stringstream ss;
-    ss << std::hex << std::setfill('0') << std::setw(16) << p1 << p2;
+    ss << std::hex << std::setfill('0') << std::setw(16) << (v1056 ^ 0x1E) << v1057;
 
     std::string output = ss.str();
     std::reverse(output.begin(), output.end());
